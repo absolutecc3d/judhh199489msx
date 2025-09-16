@@ -2,44 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Text Display</title>
+  <title>Text Input</title>
   <style>
     body {
-      background: orange;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
+      flex-direction: column;
     }
-    .banner {
-      width: 80%;
-      height: 60px;
-      border: 2px solid black;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
+    input {
+      width: 60%;
+      padding: 10px;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
     }
   </style>
 </head>
 <body>
-  <div id="display" class="banner"></div>
-
+  <input id="textInput" type="text" placeholder="Type something..." />
+  <button id="clearBtn">Clear</button>
+  
   <script>
-    const display = document.getElementById("display");
+    const input = document.getElementById("textInput");
+    const clearBtn = document.getElementById("clearBtn");
 
-    function updateText() {
-      display.textContent = localStorage.getItem("sharedText") || "";
-    }
+    // Save input to localStorage
+    input.addEventListener("input", () => {
+      localStorage.setItem("sharedText", input.value);
+      window.dispatchEvent(new Event("storage"));
+    });
 
-    // Update on load
-    updateText();
+    // Clear button logic
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      localStorage.removeItem("sharedText");
+      window.dispatchEvent(new Event("storage"));
+    });
 
-    // Update when input changes in page1
-    window.addEventListener("storage", updateText);
+    // Restore if previously typed
+    input.value = localStorage.getItem("sharedText") || "";
   </script>
 </body>
 </html>

@@ -29,20 +29,15 @@
 
     function updateDisplay() {
       const text = localStorage.getItem("sharedText") || "";
+      const bgColor = localStorage.getItem("bgColor") || "white";
       display.textContent = text;
-
-      if (text.trim() !== "") {
-        document.body.style.background = "orange";
-        localStorage.setItem("bgColor", "orange");
-      } else {
-        document.body.style.background = localStorage.getItem("bgColor") || "white";
-      }
+      document.body.style.background = bgColor;
     }
 
     // On load
     updateDisplay();
 
-    // Listen for input/clear updates
+    // Listen for updates
     window.addEventListener("storage", updateDisplay);
   </script>
 </body>

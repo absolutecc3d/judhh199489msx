@@ -2,61 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Text Input</title>
+  <title>Text Display</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
+      font-family: Arial, sans-serif;
+      transition: background 0.3s ease;
     }
-    input {
-      width: 60%;
-      padding: 10px;
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #333;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #555;
+    #display {
+      font-size: 20px;
+      font-weight: bold;
+      color: black;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <input id="textInput" type="text" placeholder="Type something..." />
-  <button id="clearBtn">Clear</button>
-  
+  <div id="display"></div>
+
   <script>
-    const input = document.getElementById("textInput");
-    const clearBtn = document.getElementById("clearBtn");
+    const display = document.getElementById("display");
 
-    // Save input to localStorage
-    input.addEventListener("input", () => {
-      localStorage.setItem("sharedText", input.value);
-      window.dispatchEvent(new Event("storage"));
-    });
+    function updateDisplay() {
+      const text = localStorage.getItem("sharedText") || "";
+      const bgColor = localStorage.getItem("bgColor") || "white";
+      display.textContent = text;
+      document.body.style.background = bgColor;
+    }
 
-    // Clear button logic
-    clearBtn.addEventListener("click", () => {
-      input.value = "";
-      localStorage.removeItem("sharedText");
-      window.dispatchEvent(new Event("storage"));
-    });
+    // On load
+    updateDisplay();
 
-    // Restore if previously typed
-    input.value = localStorage.getItem("sharedText") || "";
+    // Listen for updates
+    window.addEventListener("storage", updateDisplay);
   </script>
 </body>
 </html>

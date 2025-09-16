@@ -2,43 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Text Display</title>
+  <title>Text Input</title>
   <style>
     body {
       margin: 0;
+      font-family: Arial, sans-serif;
+      background: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
-      transition: background 0.3s ease;
+      flex-direction: column;
     }
-    #display {
-      font-size: 20px;
-      font-weight: bold;
-      color: black;
-      text-align: center;
+    input {
+      width: 60%;
+      padding: 10px;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
     }
   </style>
 </head>
 <body>
-  <div id="display"></div>
-
+  <input id="textInput" type="text" placeholder="Type something..." />
+  
+  <div class="button-row">
+    <button id="sendBtn">Send</button>
+    <button id="clearBtn">Clear</button>
+  </div>
+  
   <script>
-    const display = document.getElementById("display");
+    const input = document.getElementById("textInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const clearBtn = document.getElementById("clearBtn");
 
-    function updateDisplay() {
-      const text = localStorage.getItem("sharedText") || "";
-      const bgColor = localStorage.getItem("bgColor") || "white";
-      display.textContent = text;
-      document.body.style.background = bgColor;
-    }
+    // Send button saves input to localStorage
+    sendBtn.addEventListener("click", () => {
+      localStorage.setItem("sharedText", input.value);
+      localStorage.setItem("bgColor", input.value.trim() ? "orange" : "white");
+      window.dispatchEvent(new Event("storage"));
+    });
 
-    // On load
-    updateDisplay();
+    // Clear button logic
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      localStorage.setItem("sharedText", "");
+      localStorage.setItem("bgColor", "white");
+      window.dispatchEvent(new Event("storage"));
+    });
 
-    // Listen for updates
-    window.addEventListener("storage", updateDisplay);
+    // Restore if previously typed
+    input.value = localStorage.getItem("sharedText") || "";
   </script>
 </body>
 </html>

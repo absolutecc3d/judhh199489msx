@@ -6,12 +6,12 @@
   <style>
     body {
       margin: 0;
-      background: orange;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       font-family: Arial, sans-serif;
+      transition: background 0.3s ease;
     }
     #display {
       font-size: 20px;
@@ -27,16 +27,23 @@
   <script>
     const display = document.getElementById("display");
 
-    function updateText() {
+    function updateDisplay() {
       const text = localStorage.getItem("sharedText") || "";
       display.textContent = text;
+
+      if (text.trim() !== "") {
+        document.body.style.background = "orange";
+        localStorage.setItem("bgColor", "orange");
+      } else {
+        document.body.style.background = localStorage.getItem("bgColor") || "white";
+      }
     }
 
-    // Update on load
-    updateText();
+    // On load
+    updateDisplay();
 
-    // Update when input changes in page1
-    window.addEventListener("storage", updateText);
+    // Listen for input/clear updates
+    window.addEventListener("storage", updateDisplay);
   </script>
 </body>
 </html>
